@@ -1,24 +1,27 @@
- // ----------------------------------------------------------------------------
- // Vegas - Fullscreen Backgrounds and Slideshows with jQuery.
- // v1.3.4 - released 2013-12-16 13:28
- // Licensed under the MIT license.
- // http://vegas.jaysalvat.com/
- // ----------------------------------------------------------------------------
- // Copyright (C) 2010-2013 Jay Salvat
- // http://jaysalvat.com/
- // ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// Vegas - Fullscreen Backgrounds and Slideshows with jQuery.
+// v1.3.4 - released 2013-12-16 13:28
+// Licensed under the MIT license.
+// http://vegas.jaysalvat.com/
+// ----------------------------------------------------------------------------
+// Copyright (C) 2010-2013 Jay Salvat
+// http://jaysalvat.com/
+// ----------------------------------------------------------------------------
 
-(function($) {
-    var $background = $("<img />").addClass("vegas-background"), $overlay = $("<div />").addClass("vegas-overlay"), $loading = $("<div />").addClass("vegas-loading"), $current = $(), paused = null, backgrounds = [], step = 0, delay = 5e3, walk = function() {}, timer, methods = {
-        init: function(settings) {
+(function ($) {
+    var $background = $("<img />").addClass("vegas-background"), $overlay = $("<div />").addClass("vegas-overlay"), $loading = $("<div />").addClass("vegas-loading"), $current = $(), paused = null, backgrounds = [], step = 0, delay = 5e3, walk = function () {
+    }, timer, methods = {
+        init: function (settings) {
             var options = {
                 src: getBackground(),
                 align: "center",
                 valign: "center",
                 fade: 0,
                 loading: true,
-                load: function() {},
-                complete: function() {}
+                load: function () {
+                },
+                complete: function () {
+                }
             };
             $.extend(options, $.vegas.defaults.background, settings);
             if (options.loading) {
@@ -29,24 +32,24 @@
                 position: "fixed",
                 left: "0px",
                 top: "0px"
-            }).bind("load", function() {
+            }).bind("load", function () {
                 if ($new == $current) {
                     return;
                 }
-                $(window).bind("load resize.vegas", function(e) {
+                $(window).bind("load resize.vegas", function (e) {
                     resize($new, options);
                 });
                 if ($current.is("img")) {
                     $current.stop();
-                    $new.hide().insertAfter($current).fadeIn(options.fade, function() {
+                    $new.hide().insertAfter($current).fadeIn(options.fade, function () {
                         $(".vegas-background").not(this).remove();
-                        $("body").trigger("vegascomplete", [ this, step - 1 ]);
-                        options.complete.apply($new, [ step - 1 ]);
+                        $("body").trigger("vegascomplete", [this, step - 1]);
+                        options.complete.apply($new, [step - 1]);
                     });
                 } else {
-                    $new.hide().prependTo("body").fadeIn(options.fade, function() {
-                        $("body").trigger("vegascomplete", [ this, step - 1 ]);
-                        options.complete.apply(this, [ step - 1 ]);
+                    $new.hide().prependTo("body").fadeIn(options.fade, function () {
+                        $("body").trigger("vegascomplete", [this, step - 1]);
+                        options.complete.apply(this, [step - 1]);
                     });
                 }
                 $current = $new;
@@ -54,16 +57,16 @@
                 if (options.loading) {
                     loaded();
                 }
-                $("body").trigger("vegasload", [ $current.get(0), step - 1 ]);
-                options.load.apply($current.get(0), [ step - 1 ]);
+                $("body").trigger("vegasload", [$current.get(0), step - 1]);
+                options.load.apply($current.get(0), [step - 1]);
                 if (step) {
-                    $("body").trigger("vegaswalk", [ $current.get(0), step - 1 ]);
-                    options.walk.apply($current.get(0), [ step - 1 ]);
+                    $("body").trigger("vegaswalk", [$current.get(0), step - 1]);
+                    options.walk.apply($current.get(0), [step - 1]);
                 }
             }).attr("src", options.src);
             return $.vegas;
         },
-        destroy: function(what) {
+        destroy: function (what) {
             if (!what || what == "background") {
                 $(".vegas-background, .vegas-loading").remove();
                 $(window).unbind("*.vegas");
@@ -75,7 +78,7 @@
             clearInterval(timer);
             return $.vegas;
         },
-        overlay: function(settings) {
+        overlay: function (settings) {
             var options = {
                 src: null,
                 opacity: null
@@ -103,7 +106,7 @@
             $overlay.prependTo("body");
             return $.vegas;
         },
-        slideshow: function(settings, keepPause) {
+        slideshow: function (settings, keepPause) {
             var options = {
                 step: step,
                 delay: delay,
@@ -118,7 +121,8 @@
                     options.step = 0;
                 }
                 if (!settings.walk) {
-                    options.walk = function() {};
+                    options.walk = function () {
+                    };
                 }
                 if (options.preload) {
                     $.vegas("preload", options.backgrounds);
@@ -132,7 +136,7 @@
             if (!backgrounds.length) {
                 return $.vegas;
             }
-            var doSlideshow = function() {
+            var doSlideshow = function () {
                 if (step < 0) {
                     step = backgrounds.length - 1;
                 }
@@ -153,58 +157,58 @@
             doSlideshow();
             if (!keepPause) {
                 paused = false;
-                $("body").trigger("vegasstart", [ $current.get(0), step - 1 ]);
+                $("body").trigger("vegasstart", [$current.get(0), step - 1]);
             }
             if (!paused) {
                 timer = setInterval(doSlideshow, options.delay);
             }
             return $.vegas;
         },
-        next: function() {
+        next: function () {
             var from = step;
             if (step) {
                 $.vegas("slideshow", {
                     step: step
                 }, true);
-                $("body").trigger("vegasnext", [ $current.get(0), step - 1, from - 1 ]);
+                $("body").trigger("vegasnext", [$current.get(0), step - 1, from - 1]);
             }
             return $.vegas;
         },
-        previous: function() {
+        previous: function () {
             var from = step;
             if (step) {
                 $.vegas("slideshow", {
                     step: step - 2
                 }, true);
-                $("body").trigger("vegasprevious", [ $current.get(0), step - 1, from - 1 ]);
+                $("body").trigger("vegasprevious", [$current.get(0), step - 1, from - 1]);
             }
             return $.vegas;
         },
-        jump: function(s) {
+        jump: function (s) {
             var from = step;
             if (step) {
                 $.vegas("slideshow", {
                     step: s
                 }, true);
-                $("body").trigger("vegasjump", [ $current.get(0), step - 1, from - 1 ]);
+                $("body").trigger("vegasjump", [$current.get(0), step - 1, from - 1]);
             }
             return $.vegas;
         },
-        stop: function() {
+        stop: function () {
             var from = step;
             step = 0;
             paused = null;
             clearInterval(timer);
-            $("body").trigger("vegasstop", [ $current.get(0), from - 1 ]);
+            $("body").trigger("vegasstop", [$current.get(0), from - 1]);
             return $.vegas;
         },
-        pause: function() {
+        pause: function () {
             paused = true;
             clearInterval(timer);
-            $("body").trigger("vegaspause", [ $current.get(0), step - 1 ]);
+            $("body").trigger("vegaspause", [$current.get(0), step - 1]);
             return $.vegas;
         },
-        get: function(what) {
+        get: function (what) {
             if (what === null || what == "background") {
                 return $current.get(0);
             }
@@ -218,7 +222,7 @@
                 return paused;
             }
         },
-        preload: function(backgrounds) {
+        preload: function (backgrounds) {
             var cache = [];
             for (var i in backgrounds) {
                 if (backgrounds[i].src) {
@@ -230,6 +234,7 @@
             return $.vegas;
         }
     };
+
     function resize($img, settings) {
         var options = {
             align: "center",
@@ -237,7 +242,7 @@
         };
         $.extend(options, settings);
         if ($img.height() === 0) {
-            $img.load(function() {
+            $img.load(function () {
                 resize($(this), settings);
             });
             return;
@@ -278,19 +283,23 @@
         }
         $img.css(properties);
     }
+
     function loading() {
         $loading.prependTo("body").fadeIn();
     }
+
     function loaded() {
-        $loading.fadeOut("fast", function() {
+        $loading.fadeOut("fast", function () {
             $(this).remove();
         });
     }
+
     function getBackground() {
         if ($("body").css("backgroundImage")) {
             return $("body").css("backgroundImage").replace(/url\("?(.*?)"?\)/i, "$1");
         }
     }
+
     function getViewportSize() {
         var elmt = window, prop = "inner";
         if (!("innerWidth" in window)) {
@@ -302,7 +311,8 @@
             height: elmt[prop + "Height"]
         };
     }
-    $.vegas = function(method) {
+
+    $.vegas = function (method) {
         if (methods[method]) {
             return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
         } else if (typeof method === "object" || !method) {
