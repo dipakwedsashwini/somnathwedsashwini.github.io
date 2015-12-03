@@ -112,7 +112,7 @@ h6, p {
 }
 
 .wedding_invitation {
-    background: url(../img/invitation-bg.jpg) no-repeat fixed center center;
+    /*background: url(../img/invitation-bg.jpg) no-repeat fixed center center;*/
     color: #000
 }
 
